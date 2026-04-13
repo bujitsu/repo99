@@ -1,0 +1,39 @@
+name: Test Tag Handling
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+
+jobs:
+  test-tags:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Print GitHub context
+        run: |
+          echo "GITHUB_REF: $GITHUB_REF"
+          echo "GITHUB_REF_NAME: $GITHUB_REF_NAME"
+          echo "GITHUB_SHA: $GITHUB_SHA"
+
+      - name: Extract version
+        id: version
+        run: |
+          if [[ "${GITHUB_REF}" == refs/tags/* ]]; then
+            VERSION=${GITHUB_REF#refs/tags/v}
+          else
+            VERSION=dev-${GITHUB_SHA::7}
+          fi
+
+          echo "VERSION=$VERSION"
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+      - name: Simulate tagging logic
+        run: |
+          echo "Would create image tags:"
+          echo " - myapp:${{ steps.version.outputs.version }}"
+          
+          if [[ "${GITHUB_REF}" == refs/tags/* ]]; then
+            echo " - myapp:latest"
+          fi
