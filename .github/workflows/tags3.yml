@@ -95,3 +95,14 @@ jobs:
           echo "Creating tag: $TAG"
           git tag $TAG
           git push origin $TAG
+
+        
+      - name: Create GitHub Release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref == 'refs/heads/main' && steps.bump.outputs.new_tag || steps.sha_tag.outputs.new_tag }}
+          release_name: ${{ github.ref == 'refs/heads/main' && format('Release {0}', steps.bump.outputs.new_tag) || format('Dev {0}', steps.sha_tag.outputs.new_tag) }}
+          generate_release_notes: true
+          prerelease: ${{ github.ref == 'refs/heads/development' }}
