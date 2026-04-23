@@ -5,16 +5,16 @@ on:
     types: [trigger-release]
   # push:
   #   branches: [ main, development ]
-    inputs:
-        release_type:
-          description: 'Type of release (major, minor, patch)'
-          required: true
-          default: 'patch'
-          type: choice
-          options:
-            - major
-            - minor
-            - patch
+    # inputs:
+    #     release_type:
+    #       description: 'Type of release (major, minor, patch)'
+    #       required: true
+    #       default: 'patch'
+    #       type: choice
+    #       options:
+    #         - major
+    #         - minor
+    #         - patch
 permissions:
   contents: write
 
